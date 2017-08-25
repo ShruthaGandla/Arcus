@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Hello</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  </head>
+  <body>
+      <h1>Welcome to our weather service!!</h1>
+      <h3>Please enter the name of the city to view the current temperature.</h3>
+      <form action="/weather_location" method="get">
+	        {% csrf_token %}
+	    <input type="text" name="location">
+	    <input type="submit" value="submit">
+    </form>
+
+   <div>
+    </div>
+
+  </body>
+
+   <script>
+    $('form').submit(function(e){
+      // preventDefault stops the default action of the event (e) from being triggered.
+      e.preventDefault();
+      //retrieving the location from the form
+      var cityName = $('form').find('input[name="location"]').val();
+      //removing any spaces from the name.eg:San Francisco becomes SanFrancisco as the api does not support spaces in the name of the location
+      var newcityName = cityName.replace(/\s/g, '');
+      $.ajax({
+            url: "http://api.openweathermap.org/data/2.5/weather?q="+newcityName+"&&appid=189b9754c351ce2c417ad32ee43a93fe",
+            method: 'get',
+            data: $(this).serialize(),
+            success: function(res){
+                //the default units for temperature provided by the api is kelvin.Hence converting to Fahrenheit
+                var kelvinTemp = res.main.temp;
+                var fahTemp = 1.8 * (kelvinTemp - 273) + 32;
+                var string ="";
+                string+="<h1>"+ cityName+"</h1>"+"<p>Temperature in Fahrenheit:"+fahTemp+"</p>";
+                $("div").html(string);
+            }
+        })
+     
+    });
+  </script>
+</html>
