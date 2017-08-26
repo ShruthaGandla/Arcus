@@ -3,18 +3,29 @@
   <head>
     <meta charset="utf-8">
     <title>Hello</title>
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../style.css">
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  
   </head>
-  <body>
-      <h1>Welcome to our weather service!!</h1>
-      <h3>Please enter the name of the city to view the current temperature.</h3>
-      <form action="/weather_location" method="get">
-	        {% csrf_token %}
-	    <input type="text" name="location">
-	    <input type="submit" value="submit">
-    </form>
+  <body style="background-image:url('https://wallpapercave.com/wp/ilhVfdg.jpg');background-size: 100%;text-align:center;color:Blue;">
+      <div class ="container">
+          <div class="row">
+                 <h1>Welcome to our weather service!!</h1>
+                 <h3>Please enter the name of the city to view the current temperature.</h3>
+                    <form action="/weather_location" method="get">
+	                        {% csrf_token %}
+	                    <input type="text" name="location" placeholder="Please enter city-name">
+	                    <input type="submit" value="submit" class="btn btn-primary">
+                   </form>    
+            </div>
+      </div>
+      
 
-   <div>
+   <div id="result">
     </div>
 
   </body>
@@ -34,10 +45,10 @@
             success: function(res){
                 //the default units for temperature provided by the api is kelvin.Hence converting to Fahrenheit
                 var kelvinTemp = res.main.temp;
-                var fahTemp = 1.8 * (kelvinTemp - 273) + 32;
+                var fahTemp = Math.ceil(1.8 * (kelvinTemp - 273) + 32);
                 var string ="";
-                string+="<h1>"+ cityName+"</h1>"+"<p>Temperature in Fahrenheit:"+fahTemp+"</p>";
-                $("div").html(string);
+                string+="<h1>"+ cityName+"</h1>"+"<p>Temperature : "+fahTemp+"℉"+"</p>";
+                $("#result").html(string);
             }
         })
      
